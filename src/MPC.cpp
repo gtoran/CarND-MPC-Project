@@ -9,20 +9,15 @@ using CppAD::AD;
 size_t N = 25;
 double dt = 0.05;
 
-double x = x0[0];
-double y = x0[1];
-double psi = x0[2];
-double v = x0[3];
-double cte = x0[4];
-double epsi = x0[5];
-
-// Set the initial variable values
-vars[x_start] = x;
-vars[y_start] = y;
-vars[psi_start] = psi;
-vars[v_start] = v;
-vars[cte_start] = cte;
-vars[epsi_start] = epsi;
+// This should cover all of the variables we "imported" from Mind The Line
+size_t x_start = 0;
+size_t y_start = x_start + N;
+size_t psi_start = y_start + N;
+size_t v_start = psi_start + N;
+size_t cte_start = v_start + N;
+size_t epsi_start = cte_start + N;
+size_t delta_start = epsi_start + N;
+size_t a_start = delta_start + N - 1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -35,6 +30,7 @@ vars[epsi_start] = epsi;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
+double ref_v = 70;
 
 class FG_eval {
  public:
