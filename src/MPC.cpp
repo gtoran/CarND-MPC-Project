@@ -30,7 +30,7 @@ size_t a_start = delta_start + N - 1;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
-double ref_v = 80; // I really appreciate how I'm able to increase speed over the original 70 without any incidents.
+double ref_v = 88; // I really appreciate how I'm able to increase speed over the original 70 without any incidents. 88 MPH, Marty!
 
 class FG_eval {
  public:
