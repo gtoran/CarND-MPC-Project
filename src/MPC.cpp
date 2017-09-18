@@ -130,7 +130,7 @@ MPC::~MPC() {}
 
 vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   bool ok = true;
-  size_t i;
+  // size_t i;
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
   // TODO: Set the number of model variables (includes both states and inputs).
@@ -138,9 +138,10 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // element vector and there are 10 timesteps. The number of variables is:
   //
   // 4 * 10 + 2 * 9
-  size_t n_vars = 0;
+  size_t n_vars = N * 6 + (N - 1) * 2;
+
   // TODO: Set the number of constraints
-  size_t n_constraints = 0;
+  size_t n_constraints = N * 6;
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
@@ -149,9 +150,32 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     vars[i] = 0;
   }
 
+  vars[x_start] = state[0];
+  vars[y_start] = state[1];
+  vars[psi_start] = state[2];
+  vars[v_start] = state[3];
+  vars[cte_start] = state[4];
+  vars[epsi_start] = state[5];
+
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
+  for (unsigned int i = 0; i < delta_start; i++) {
+    vars_lowerbound[i] = std::numeric_limits <double> ::lowest();
+    vars_upperbound[i] = std::numeric_limits <double> ::max();
+  }
+
+  // Delta upper and lower limits.
+  for (unsigned int i = delta_start; i < a_start; i++) {
+    vars_lowerbound[i] = -25 * M_PI / 180;
+    vars_upperbound[i] = 25 * M_PI / 180;
+  }
+
+  // Acceleration upper and lower limits.
+  for (unsigned int i = a_start; i < n_vars; i++) {
+    vars_lowerbound[i] = -1.0;
+    vars_upperbound[i] = 1.0;
+  }
 
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
