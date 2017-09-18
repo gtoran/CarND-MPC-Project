@@ -6,8 +6,16 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 12; // After much tweaking, this value seems the most stable
-double dt = 0.1; // I wasn't able to find a better suiting value for dt other than this one.
+// After much tweaking, this value seems the most stable. I was able to complete successful
+// laps using other close values, but I observed the least swerving and over correction 
+// situations with 12.
+size_t N = 12;
+
+// I wasn't able to find a better suiting value for dt other than this one. Other shorter
+// values interfere dangerously with the model's effectiveness to drive around safely.
+// Larger values on the other hand caused the vehicle to act way ahead of its trajectory.
+// Just doubling it (0.2) is enough to cause this.
+double dt = 0.1; 
 
 // This should cover all of the variables we "imported" from Mind The Line
 size_t x_start = 0;
